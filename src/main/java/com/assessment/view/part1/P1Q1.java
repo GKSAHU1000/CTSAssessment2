@@ -18,8 +18,7 @@ public class P1Q1 {
         ProductController productController = new ProductController();
 
         // Initialize a list of products. Use Stream.of() to add products to the list.
-        List<Product> productListUsingStreamOf = productController.getProductListUsingStreamOf();
-        System.out.println(productListUsingStreamOf);
+        productController.getProductListUsingStreamOf().forEach(System.out::println);
 
     }
 }
