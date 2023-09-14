@@ -107,10 +107,9 @@ public class ProductController {
 
     //P2Q3. B. - Use the partitioningBy() collector to partition products based on a certain
     //price threshold, for instance, separating premium products from regular ones.
-
-    public Map<Boolean, List<Product>> getProductsPartitioningByPrice(Double price) {
+    public Map<Boolean, List<Product>> getProductsPartitioningByPrice(Double premiumThreshold) {
         return geAlltProducts.stream()
-                .collect(Collectors.partitioningBy(prd -> prd.getPrice() > price));
+                .collect(Collectors.partitioningBy(product -> product.getPrice() >= premiumThreshold));
     }
 
 
