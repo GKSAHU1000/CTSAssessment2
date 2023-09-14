@@ -2,17 +2,17 @@ package com.assessment.controller;
 
 import com.assessment.data.DataClass;
 import com.assessment.models.Product;
+
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ProductController {
 
-  //  public static List<Product>  DataClass.getAllCartProducts = new ArrayList<>();
-
+    //Initialise the ALl data list
     public static List<Product> geAlltProducts = DataClass.getAllProducts();
 
-    ///•P1Q1 Initialize a list of products. Use Stream.of() to add products to the list.
+    // get all product using those added by stream.Of
     public List<Product> getProductListUsingStreamOf() {
         return Stream.of(
                 new Product(1, "Apple iPhone 13", 799.99, 4.5),
@@ -29,14 +29,14 @@ public class ProductController {
     }
 
 
-    // P1Q2. A. Use the filter() method to list products below a certain price.
+    // get Products by Below given Price
     public List<Product> getProductsBelowPrice(double price) {
         return geAlltProducts.stream()
                 .filter(x -> x.getPrice() > price)
                 .collect(Collectors.toList());
     }
 
-    //P1Q2. B. Use the filter() method again to list products with a rating above a certain
+    // get Products by above given  rating
     public List<Product> getProductsAboveRating(double rating) {
         return geAlltProducts.stream()
                 .filter(x -> x.getRating() > rating)
@@ -44,36 +44,36 @@ public class ProductController {
     }
 
 
-    //P1Q3. A1. Sort products based on their price and then by rating.
-
+    //get ProductSort products based on their price and then by rating.
     public List<Product> getPoductSortByPriceAndRating() {
         return geAlltProducts.stream()
                 .sorted(Comparator.comparing(Product::getPrice).thenComparing(Product::getRating))
                 .collect(Collectors.toList());
     }
-    //Map Product products into a list of their names
+
+    //get Only Product name List
     public List<String> getPoductByName() {
         return geAlltProducts.stream()
                 .map(Product::getName)
                 .collect(Collectors.toList());
     }
 
-    ////Map Product products into a list of their Price
+    // get only Product price list
     public List<Double> getPoductByPrice() {
-        return  geAlltProducts.stream()
+        return geAlltProducts.stream()
                 .map(Product::getPrice)
                 .collect(Collectors.toList());
     }
 
 
-    //P2Q1 Use the summarizingDouble() collector to get the count, sum, min, max, and average price of products
+    //P2Q1  get All Products Details like count, sum, min, max, and average price
     public DoubleSummaryStatistics doubleSummaryStatistics() {
         return geAlltProducts.stream()
                 .collect(Collectors.summarizingDouble(Product::getPrice));
 
     }
 
-    //P2Q2  Implement an addToCart method, where products can be added to a user's cart using their IDs
+    //P2Q2  add to cart based on product id
     public boolean addToCart(int pid) {
         Optional<Product> product = geAlltProducts.stream().
                 filter(p -> p.getId() == pid).findFirst();
@@ -85,19 +85,19 @@ public class ProductController {
         }
     }
 
-    //Get user cart all products
+    //Get cart all products
     public List<Product> getCartProducts() {
-        return  DataClass.getAllCartProducts;
+        return DataClass.getAllCartProducts;
     }
 
-    //Implement a calculateTotal method which uses the reduce() method to compute the total price of products in the cart.
+    // get total Price of the Products
     public double calculateTotal() {
-        return  DataClass.getAllCartProducts.stream().mapToDouble(Product::getPrice)
+        return DataClass.getAllCartProducts.stream().mapToDouble(Product::getPrice)
                 .reduce(0.0, Double::sum);
     }
 
 
-    //P2Q3. A. - Use the groupingBy() collector to group products by their rating.
+    //get Product grouping by their rating
     public Map<Double, List<Product>> getProductsGroppingByRating() {
 
         return geAlltProducts.stream()
@@ -113,33 +113,39 @@ public class ProductController {
                 .collect(Collectors.partitioningBy(prd -> prd.getPrice() > price));
     }
 
-    public List<Product> findProduceByNameSeq(String pname){
+
+    // get product  by name using sequential stream
+    public List<Product> findProduceByNameSeq(String pname) {
         return geAlltProducts.stream()
-                .filter(prd->prd.getName().equals(pname))
+                .filter(prd -> prd.getName().equals(pname))
                 .collect(Collectors.toList());
     }
 
-    public List<Product> findProduceByNameParallel(String pname){
+    // get product  by name using parallel stream
+    public List<Product> findProduceByNameParallel(String pname) {
         return geAlltProducts.stream()
                 .parallel()
-                .filter(prd->prd.getName().equals(pname))
+                .filter(prd -> prd.getName().equals(pname))
                 .collect(Collectors.toList());
     }
 
 
+    // get total Price of the cart Products using sequential Stream
     public double checkOutSeq() {
-        return  DataClass.getAllCartProducts.stream()
+        return DataClass.getAllCartProducts.stream()
                 .mapToDouble(Product::getPrice)
                 .reduce(0.0, Double::sum);
     }
+
+
+    // get total Price of the cart Products using Parallel Stream
     public double checkOutParallel() {
-        return  DataClass.getAllCartProducts.
+        return DataClass.getAllCartProducts.
                 parallelStream()
                 .sequential()
                 .mapToDouble(Product::getPrice)
                 .reduce(0.0, Double::sum);
     }
-
 
 
 }
